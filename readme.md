@@ -14,7 +14,7 @@ Email: [duquanghuy@gmail.com]  or [duquanghuy98@gmail.com]
 
 | # | Title | Highlights |
 |---|-------|------------|
-| 1 | Three Ways to Sum to N | Interactive 3D carousel with three JS implementations, live results, and complexity badges |
+| 1 | Three Ways to Sum to N | Interactive 3D carousel with three JS implementations, live results, complexity badges, and **More info** modals with step-by-step algorithm visualizations (Gauss pairing, loop stepper, recursion call stack), playback controls, and adjustable speed |
 | 2 | Fancy Swap Form | Real-time token prices (TanStack Query), swap + fiat buy/sell tabs, trending bar, top prices panel |
 | 3 | Messy React | 14 issues with severity filters, expandable cards, resizable Before/After diff viewer with dual-pane line highlights |
 
@@ -23,16 +23,18 @@ Email: [duquanghuy@gmail.com]  or [duquanghuy98@gmail.com]
 ## Tech Stack
 
 - **Vite** + **React 18** + **TypeScript**
-- **Tailwind CSS** + **shadcn/ui** (Radix UI primitives)
-- **Framer Motion** - page transitions, carousel, micro-animations
+- **React Router** - client-side routing across landing + problem pages
+- **Tailwind CSS** + **shadcn/ui** (Radix UI primitives: Dialog, Popover, Tabs, Label, Separator, Slot)
+- **Framer Motion** - page transitions, carousel, modal/step animations
 - **TanStack Query** - price API data fetching
 - **i18next** - English / Vietnamese language toggle
 - **next-themes** - dark / light mode
 - **Sonner** - toast notifications
-- **react-syntax-highlighter** - code display in Problem 3
+- **react-syntax-highlighter** - code display (Problem 1 modals + Problem 3 diff viewer)
 - **react-resizable-panels** - side-by-side diff viewer
 - **react-number-format** + **bignumber.js** - precise amount formatting
-- **ogl** - WebGL particle background.
+- **lucide-react** - icons
+- **ogl** - WebGL particle background
 
 ---
 
@@ -57,27 +59,31 @@ npm run preview
 ```
 src/
 ├── components/
-│   ├── ui/              shadcn/ui primitives
-│   ├── effects/         Animation components (Particles, GooeyNav, etc.)
+│   ├── ui/              shadcn/ui primitives (Button, Card, Dialog, Tabs, …)
+│   ├── effects/         Particles, GooeyNav, ClickSpark, FuzzyText, BorderGlow, DecryptedText
 │   ├── layout/          Layout shell + Navbar
 │   ├── display/         CodeSnippet, PageTransition, TruncatedNumber
 │   └── common/          Shared ProblemBadge
-├── hooks/               Shared React hooks
+├── hooks/               Shared React hooks (debounce, delayed value, mobile breakpoint)
 ├── lib/
-│   └── numbers/         Display formatting + exchange calculations
+│   ├── numbers/         Display formatting + exchange calculations
+│   ├── formatNumbers.ts
+│   └── utils.ts
 ├── pages/               Landing page
 ├── problem1/
-│   ├── components/      Solution carousel
-│   ├── constants/       Carousel styling maps
-│   ├── hooks/           Infinite carousel logic
+│   ├── components/      Solution carousel, detail modal, per-algorithm visualizers
+│   ├── constants/       Carousel styling maps, playback speed constants
+│   ├── hooks/           Infinite carousel + algorithm step playback
+│   ├── visualizers/     Trace generators (Gauss, loop, recursion)
 │   └── written-answer/  Original JS implementations (do not modify)
 ├── problem2/
 │   ├── components/      Swap form, exchange panel, token selector
 │   │   └── fiat/        Fiat buy/sell form + order summary
-│   ├── hooks/           Token prices, amount validation
+│   ├── hooks/           Token prices, amount validation, fiat calculations
 │   └── lib/             Swap/fiat utilities
 ├── problem3/
-│   ├── components/      Issue cards, diff viewer panes
+│   ├── components/      Issue cards, progress strip, diff viewer panes
+│   │   └── diff/        CodeDiffViewer, CodePane, toolbar
 │   ├── data/            Issue metadata
 │   ├── hooks/           Synced scroll for diff panes
 │   └── written-answer/  Original + refactored code (do not modify)
@@ -92,4 +98,7 @@ src/
 - **Particles** + click spark effects on all pages
 - **Lazy-loaded** Problem 3 page for faster initial load
 - **Full i18n** - all user-facing strings in `en.json` / `vi.json`
-- **Responsive** - mobile swipe carousel (Problem 1), stacked diff viewer (Problem 3)
+- **Responsive** - mobile swipe carousel (Problem 1), full-screen algorithm detail modals on mobile, stacked diff viewer (Problem 3)
+- **Problem 1 algorithm deep-dives** - More info modals with step playback (play/pause/scrub), speed multiplier (×0.5–×3), live code trace with line highlighting, and per-approach visualizations
+- **Skeleton loading** - initial load placeholders on Problem 1 carousel, Problem 2 swap form, and Problem 3 page
+- **Simulated latency** - a minimum **1s** loading delay (`useDelayedValue` / `useMinLoadingTime` in `hooks/useDelayedValue.ts`) so skeletons and pending states are visible even when data resolves instantly (e.g. Problem 1 result recalc, Problem 2 price/quote updates)
