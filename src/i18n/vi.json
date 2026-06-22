@@ -1,0 +1,283 @@
+{
+  "brand": {
+    "suffix": "Tech"
+  },
+  "common": {
+    "retry": "Thử lại"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "problem1": "Bài 1",
+    "problem2": "Bài 2",
+    "problem3": "Bài 3"
+  },
+  "landing": {
+    "badge": "Bài nộp phỏng vấn 99Tech",
+    "title": "Code Challenge",
+    "subtitlePrefix": "Ba bài toán được giải quyết bằng",
+    "subtitleSuffix": "Khám phá từng giải pháp bên dưới.",
+    "viewSolution": "Xem giải pháp",
+    "problems": {
+      "p1": {
+        "title": "Ba cách tính tổng đến n",
+        "description": "Ba cách triển khai hàm tính tổng, mỗi cách thể hiện một phương pháp khác nhau với sự đánh đổi về độ phức tạp thời gian và không gian.",
+        "tags": ["JavaScript", "Thuật toán", "Toán học"]
+      },
+      "p2": {
+        "title": "Form hoán đổi tiền tệ",
+        "description": "Giao diện hoán đổi tiền tệ với tỷ giá thời gian thực từ API, tìm kiếm token và kiểm tra dữ liệu đầy đủ.",
+        "tags": ["React", "TypeScript", "API"]
+      },
+      "p3": {
+        "title": "React lộn xộn",
+        "description": "Review code xác định các điểm không hiệu quả và anti-pattern trong một component React, kèm giải pháp đã được tái cấu trúc.",
+        "tags": ["React", "TypeScript", "Tái cấu trúc"]
+      }
+    }
+  },
+  "problem1": {
+    "title": "Ba cách tính tổng đến n",
+    "description": "Nhập số nguyên n để tính tổng 1 + 2 + … + n bằng ba cách triển khai khác nhau.",
+    "inputLabel": "Giá trị n",
+    "inputPlaceholder": "Nhập số nguyên…",
+    "implementations": {
+      "a": {
+        "name": "Công thức Gauss",
+        "description": "Công thức toán học khép kín: n × (n + 1) / 2"
+      },
+      "b": {
+        "name": "Vòng lặp",
+        "description": "Tích lũy tổng trong một vòng lặp for duy nhất"
+      },
+      "c": {
+        "name": "Đệ quy",
+        "description": "Giảm bài toán xuống một bước ở mỗi lần gọi"
+      }
+    },
+    "result": "Kết quả",
+    "time": "Thời gian",
+    "space": "Bộ nhớ",
+    "emptyHint": "Nhập giá trị ở trên để xem kết quả",
+    "carousel": {
+      "prevAria": "Giải pháp trước",
+      "nextAria": "Giải pháp tiếp theo",
+      "hintDesktop": "Nhấp hai bên, vuốt hoặc dùng mũi tên - lặp vô hạn",
+      "hintMobile": "Vuốt hoặc dùng mũi tên - lặp vô hạn"
+    },
+    "moreInfo": "Xem thêm",
+    "detail": {
+      "noInput": "Nhập giá trị n ở trang để chạy mô phỏng từng bước.",
+      "visualization": "Mô phỏng",
+      "codeTrace": "Theo dõi mã",
+      "work": "Khối lượng với n này",
+      "step": "Bước {{current}} / {{total}}",
+      "scrubAria": "Kéo qua các bước thuật toán",
+      "play": "Phát",
+      "pause": "Tạm dừng",
+      "reset": "Đặt lại",
+      "prevStep": "Bước trước",
+      "nextStep": "Bước tiếp",
+      "speedAria": "Tốc độ phát",
+      "speedOption": "Tốc độ {{speed}}",
+      "explain": {
+        "a": "Gauss nhận thấy ghép các số hạng ở hai đầu luôn cho tổng (n + 1). Nhờ đó cả dãy gói gọn thành một công thức - không cần vòng lặp.",
+        "b": "Vòng lặp duyệt từng số từ 1 đến n và cộng dồn vào tổng. Theo dõi i và sum thay đổi mỗi lần lặp.",
+        "c": "Mỗi lần gọi phải chờ bài toán nhỏ hơn hoàn thành. Ngăn xếp call stack tăng theo n - đó là lý do độ phức tạp bộ nhớ O(n)."
+      },
+      "gauss": {
+        "empty": "Với n ≤ 0, tổng được định nghĩa là 0 - không cần ghép cặp.",
+        "intro": "Dãy 1 + 2 + … + {{n}} có thể sắp xếp lại bằng cách ghép các số hạng ở hai đầu.",
+        "pair": "Ghép {{left}} + {{right}} = {{sum}} (cặp {{index}} / {{total}}). Mỗi cặp có tổng bằng n + 1.",
+        "middle": "n lẻ nên số hạng giữa {{value}} đứng riêng.",
+        "formulaIntro": "Gom các cặp thành công thức khép kín:",
+        "constant": "Chỉ một phép nhân và một phép chia - thời gian O(1)."
+      },
+      "loop": {
+        "iterations": "Số lần lặp",
+        "track": "Dãy lặp",
+        "init": "Khởi tạo sum = 0 trước khi vào vòng lặp.",
+        "checkContinue": "Điều kiện: i = {{i}} ≤ n - tiếp tục. sum hiện tại = {{sum}}.",
+        "checkExit": "Điều kiện: i = {{i}} > n - thoát vòng lặp. Tổng cuối = {{sum}}.",
+        "add": "Cộng i = {{i}}: {{before}} → {{after}}.",
+        "done": "Trả về sum = {{sum}}."
+      },
+      "recursion": {
+        "depth": "Độ sâu stack",
+        "calls": "Tổng lần gọi",
+        "stack": "Call stack",
+        "call": "Gọi sum({{n}}) - phải chờ sum({{n}} − 1) trước.",
+        "base": "Base case: sum(0) = 0. Bắt đầu trả ngược.",
+        "return": "sum({{n}}) = {{n}} + sum({{n}} − 1) = {{n}} + {{child}} = {{result}}.",
+        "waiting": "đang chờ…",
+        "hiddenFrames": "+ {{count}} frame phía dưới",
+        "emptyStack": "Stack trống."
+      }
+    }
+  },
+  "problem2": {
+    "title": "Hoán đổi tiền tệ",
+    "youSell": "Bạn bán",
+    "youBuy": "Bạn mua",
+    "trending": "Xu hướng",
+    "topPrices": "Giá USD cao nhất",
+    "topPricesHint": "Giá thực từ API",
+    "tabSwap": "Hoán đổi",
+    "tabCash": "Mua / Bán",
+    "exchange": "Hoán đổi",
+    "selectToken": "Chọn token",
+    "searchToken": "Tìm token…",
+    "noTokens": "Không tìm thấy token",
+    "swapping": "Đang hoán đổi…",
+    "errorPrices": "Không tải được giá. Vui lòng thử lại.",
+    "success": "Hoán đổi thành công!",
+    "successDetail": "{{from}} → {{to}} đã hoàn thành",
+    "networks": {
+      "ETH": "Ethereum",
+      "BTC": "Bitcoin",
+      "BSC": "BSC",
+      "Neo": "Neo",
+      "THORChain": "THORChain"
+    },
+    "fiat": {
+      "usd": "USD",
+      "youPay": "Bạn trả",
+      "youReceive": "Bạn nhận",
+      "youGet": "Bạn nhận được",
+      "grossUsd": "Giá trị gộp",
+      "paymentMethod": "Phương thức thanh toán",
+      "payoutMethod": "Phương thức nhận tiền",
+      "methods": {
+        "card": "Thẻ ghi nợ / tín dụng",
+        "cardFee": "1.5% + $0.99",
+        "bank": "Chuyển khoản ngân hàng",
+        "bankFee": "Phí 0.5%"
+      },
+      "minBuy": "Mua tối thiểu $10",
+      "minBuyHint": "Tối thiểu $10 · Giá từ API thực",
+      "feeDeducted": "Đã trừ phí dịch vụ {{fee}}",
+      "processing": "Đang xử lý…",
+      "summaryTitle": "Tóm tắt đơn hàng",
+      "summaryHint": "Nhập số lượng để xem phí và thời gian nhận",
+      "rate": "Tỷ giá",
+      "serviceFee": "Phí dịch vụ",
+      "etaInstant": "Dự kiến nhận: trong vài phút",
+      "etaBank": "Dự kiến nhận: 1–3 ngày làm việc",
+      "disclaimer": "Chỉ là demo - không xử lý thanh toán thật. Tỷ giá từ API giá thực.",
+      "successBuy": "Mô phỏng mua thành công!",
+      "successBuyDetail": "Trả {{usd}} → nhận {{amount}} {{token}}",
+      "successSell": "Mô phỏng bán thành công!",
+      "successSellDetail": "Bán {{amount}} {{token}} → {{usd}} vào tài khoản"
+    },
+    "errors": {
+      "required": "Vui lòng nhập số lượng",
+      "invalid": "Vui lòng nhập số hợp lệ",
+      "positive": "Số lượng phải lớn hơn 0",
+      "sameToken": "Chọn hai token khác nhau"
+    }
+  },
+  "problem3": {
+    "title": "React lộn xộn - Review code",
+    "subtitle": "Xác định các điểm không hiệu quả và anti-pattern trong một React component, kèm giải pháp đã được tái cấu trúc.",
+    "tabs": {
+      "issues": "Lỗi tìm thấy",
+      "compare": "Trước / Sau"
+    },
+    "issueCount": "{{count}} vấn đề được xác định",
+    "seeFixInDiff": "Xem sửa trong diff",
+    "emptyFilter": "Không có vấn đề nào khớp bộ lọc hiện tại.",
+    "progress": {
+      "allFixed": "Tất cả đã được sửa trong phiên bản tái cấu trúc"
+    },
+    "compare": {
+      "before": "Trước",
+      "after": "Sau",
+      "beforeOriginal": "Trước (Gốc)",
+      "afterRefactored": "Sau (Tái cấu trúc)"
+    },
+    "diff": {
+      "prev": "Trước",
+      "next": "Sau",
+      "reasoning": "Lý do",
+      "issueLabel": "Vấn đề #{{id}}",
+      "dragHint": "Kéo thanh chia để thay đổi kích thước khung",
+      "scrollHint": "Cuộn ngang để xem toàn bộ dòng code"
+    },
+    "filenames": {
+      "refactored": "WalletPage.tsx (tái cấu trúc)",
+      "fullRefactored": "WalletPage.tsx - toàn bộ file tái cấu trúc"
+    },
+    "severity": {
+      "critical": "Nghiêm trọng",
+      "warning": "Cảnh báo",
+      "minor": "Nhỏ"
+    },
+    "issues": {
+      "1": {
+        "title": "Biến lhsPriority không được khai báo",
+        "detail": "lhsPriority được tham chiếu bên trong callback filter nhưng chưa được khai báo. Biến đúng trong phạm vi là balancePriority. Điều này gây ra ReferenceError khi chạy và làm crash component."
+      },
+      "2": {
+        "title": "Logic filter bị đảo ngược",
+        "detail": "Điều kiện giữ lại các balance có amount <= 0, ngược với hành vi mong muốn. Các ví có số dư dương mới nên được hiển thị; điều kiện phải là amount > 0."
+      },
+      "3": {
+        "title": "Interface WalletBalance thiếu trường blockchain",
+        "detail": "getPriority(balance.blockchain) được gọi xuyên suốt component, nhưng interface WalletBalance không khai báo thuộc tính blockchain. TypeScript sẽ báo lỗi và giá trị runtime luôn là undefined, khiến mọi priority đều là -99."
+      },
+      "4": {
+        "title": "Sort comparator thiếu return khi priority bằng nhau",
+        "detail": "Khi leftPriority bằng rightPriority, comparator không return giá trị nào. JavaScript sort nhận undefined, gây ra thứ tự không ổn định và hành vi danh sách sai."
+      },
+      "5": {
+        "title": "Kiểu dữ liệu sai trong rows map - balance.formatted là undefined",
+        "detail": "rows lặp qua sortedBalances nhưng gán kiểu cho mỗi phần tử là FormattedWalletBalance, rồi đọc balance.formatted. Vì các phần tử của sortedBalances là WalletBalance (không có thuộc tính formatted), đây vừa là TypeScript sai vừa là bug runtime."
+      },
+      "6": {
+        "title": "Thiếu giá token gây ra NaN",
+        "detail": "prices[balance.currency] được nhân trực tiếp mà không có fallback. Khi token không có giá, biểu thức trả về NaN và lan vào usdValue, làm hỏng hiển thị và tính toán phía sau."
+      },
+      "7": {
+        "title": "Prop children bị destructure nhưng không render",
+        "detail": "children được tách từ props cùng rest, nhưng JSX chỉ render rows bên trong div wrapper. Mọi nội dung con truyền vào WalletPage bị bỏ qua, phá vỡ API mong đợi của component."
+      },
+      "8": {
+        "title": "prices trong dependency array của useMemo không được sử dụng",
+        "detail": "prices được liệt kê là dependency của useMemo tính sortedBalances, nhưng callback không bao giờ đọc prices. Điều này gây ra tính toán lại không cần thiết mỗi khi prices thay đổi."
+      },
+      "9": {
+        "title": "formattedBalances được tính nhưng không dùng",
+        "detail": "formattedBalances được tạo ra từ sortedBalances và thêm trường formatted, nhưng mapping rows bên dưới lại lặp qua sortedBalances. Điều này khiến formattedBalances là dead code và lãng phí tính toán mỗi lần render."
+      },
+      "10": {
+        "title": "Gọi getPriority lặp lại trong sort comparator",
+        "detail": "Callback sort gọi getPriority hai lần mỗi lần so sánh. Với O(n log n) lần so sánh, priority bị tính lại nhiều hơn cần thiết. Nên tính priority một lần cho mỗi balance trước khi sort."
+      },
+      "11": {
+        "title": "getPriority được định nghĩa bên trong component",
+        "detail": "getPriority là một pure function không phụ thuộc vào state hay props của component. Định nghĩa nó bên trong WalletPage khiến nó bị tạo lại mỗi lần render. Nên đưa ra ngoài component."
+      },
+      "12": {
+        "title": "key prop không ổn định - key={index}",
+        "detail": "Dùng index mảng làm React key gây ra reconciliation sai khi các phần tử được sắp xếp lại hoặc lọc. Nên dùng composite key như blockchain-currency, vì currency đơn lẻ có thể trùng trên các chain khác nhau."
+      },
+      "13": {
+        "title": "Tham số getPriority được gán kiểu any",
+        "detail": "Tham số blockchain được gán kiểu any, bỏ qua khả năng của TypeScript phát hiện giá trị không hợp lệ lúc biên dịch. Nên gán kiểu string để khớp với tên blockchain trong switch."
+      },
+      "14": {
+        "title": "Thiếu memoization cho dữ liệu phái sinh và rows",
+        "detail": "formattedBalances và rows được tính lại mỗi lần render dù sortedBalances và prices không đổi. Bọc chúng trong useMemo tránh tạo object và React element không cần thiết."
+      }
+    }
+  },
+  "theme": {
+    "toggle": "Chuyển giao diện",
+    "light": "Sáng",
+    "dark": "Tối"
+  },
+  "language": {
+    "toggle": "Ngôn ngữ",
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

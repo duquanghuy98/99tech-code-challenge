@@ -1,0 +1,126 @@
+import { AlertCircle, AlertTriangle, Info } from 'lucide-react'
+import type { Issue, Severity } from '../types'
+
+export const issues: Issue[] = [
+  {
+    id: '1',
+    severity: 'critical',
+    bugSnippet: `if (lhsPriority > -99) { // ❌ lhsPriority is undefined`,
+    fixSnippet:  `.filter(({ balance, priority }) => priority > -99 && balance.amount > 0) // ✅ Fix #1`,
+    originalLines: [50, 50],
+    refactoredLines: [49, 49],
+  },
+  {
+    id: '2',
+    severity: 'critical',
+    bugSnippet: `if (balance.amount <= 0) { return true; } // ❌ inverted`,
+    fixSnippet:  `.filter(({ balance, priority }) => priority > -99 && balance.amount > 0) // ✅ Fix #2`,
+    originalLines: [51, 51],
+    refactoredLines: [49, 49],
+  },
+  {
+    id: '3',
+    severity: 'warning',
+    bugSnippet: `interface WalletBalance {\n  currency: string;\n  amount: number;\n  // ❌ blockchain field absent\n}`,
+    fixSnippet:  `interface WalletBalance {\n  currency: string\n  amount: number\n  blockchain: string // ✅ Fix #3\n}`,
+    originalLines: [7, 11],
+    refactoredLines: [7, 11],
+  },
+  {
+    id: '4',
+    severity: 'warning',
+    bugSnippet: `if (leftPriority > rightPriority) return -1\nelse if (rightPriority > leftPriority) return 1\n// ❌ no return when equal`,
+    fixSnippet:  `.sort((a, b) => b.priority - a.priority) // ✅ Fix #4: handles equality`,
+    originalLines: [57, 66],
+    refactoredLines: [50, 50],
+  },
+  {
+    id: '5',
+    severity: 'warning',
+    bugSnippet: `const rows = sortedBalances.map((balance: FormattedWalletBalance) =>\n  formattedAmount={balance.formatted} // ❌ undefined`,
+    fixSnippet:  `formattedBalances.map((balance: FormattedWalletBalance) =>\n  formattedAmount={balance.formatted} // ✅ Fix #5`,
+    originalLines: [81, 89],
+    refactoredLines: [67, 76],
+  },
+  {
+    id: '6',
+    severity: 'warning',
+    bugSnippet: `const usdValue = prices[balance.currency] * balance.amount; // ❌ NaN if price missing`,
+    fixSnippet:  `const price = prices[balance.currency] ?? 0 // ✅ Fix #6\nconst usdValue = price * balance.amount`,
+    originalLines: [82, 82],
+    refactoredLines: [68, 69],
+  },
+  {
+    id: '7',
+    severity: 'warning',
+    bugSnippet: `const { children, ...rest } = props;\n// ...\n<div {...rest}>{rows}</div> // ❌ children dropped`,
+    fixSnippet:  `{children} {/* ✅ Fix #7: children forwarded */}\n{rows}`,
+    originalLines: [94, 98],
+    refactoredLines: [85, 86],
+  },
+  {
+    id: '8',
+    severity: 'warning',
+    bugSnippet: `}, [balances, prices]); // ❌ prices listed but never used`,
+    fixSnippet:  `}, [balances]) // ✅ Fix #8: prices removed from deps`,
+    originalLines: [68, 68],
+    refactoredLines: [52, 52],
+  },
+  {
+    id: '9',
+    severity: 'warning',
+    bugSnippet: `// ❌ formattedBalances computed but rows uses sortedBalances\nconst rows = sortedBalances.map(...)`,
+    fixSnippet:  `const formattedBalances = useMemo(...)\nformattedBalances.map(...) // ✅ Fix #9`,
+    originalLines: [70, 81],
+    refactoredLines: [55, 67],
+  },
+  {
+    id: '10',
+    severity: 'minor',
+    bugSnippet: `.sort((lhs, rhs) => {\n  getPriority(lhs.blockchain); // ❌ called twice per compare\n  getPriority(rhs.blockchain);\n})`,
+    fixSnippet:  `priority: getPriority(balance.blockchain) // ✅ Fix #10: computed once`,
+    originalLines: [58, 66],
+    refactoredLines: [46, 46],
+  },
+  {
+    id: '11',
+    severity: 'minor',
+    bugSnippet: `const WalletPage = (props) => {\n  const getPriority = (blockchain: any) => { // ❌ inside component`,
+    fixSnippet:  `// ✅ Fix #11: hoisted outside component\nconst getPriority = (blockchain: string): number => {`,
+    originalLines: [27, 44],
+    refactoredLines: [18, 35],
+  },
+  {
+    id: '12',
+    severity: 'minor',
+    bugSnippet: `key={index} // ❌ unstable key`,
+    fixSnippet:  `key={\`\${balance.blockchain}-\${balance.currency}\`} // ✅ Fix #12: composite key`,
+    originalLines: [86, 86],
+    refactoredLines: [73, 73],
+  },
+  {
+    id: '13',
+    severity: 'minor',
+    bugSnippet: `const getPriority = (blockchain: any): number => { // ❌ any type`,
+    fixSnippet:  `const getPriority = (blockchain: string): number => { // ✅ Fix #13`,
+    originalLines: [29, 29],
+    refactoredLines: [20, 20],
+  },
+  {
+    id: '14',
+    severity: 'minor',
+    bugSnippet: `const formattedBalances = sortedBalances.map(...)\nconst rows = sortedBalances.map(...) // ❌ no useMemo`,
+    fixSnippet:  `const formattedBalances = useMemo(..., [sortedBalances])\nconst rows = useMemo(..., [formattedBalances, prices]) // ✅ Fix #14`,
+    originalLines: [80, 92],
+    refactoredLines: [55, 81],
+  },
+]
+
+export const severityConfig: Record<
+  Severity,
+  { icon: React.ElementType; badgeVariant: 'critical' | 'warning' | 'minor'; border: string; iconColor: string }
+> = {
+  critical: { icon: AlertCircle, badgeVariant: 'critical', border: 'border-l-red-500', iconColor: 'text-red-500' },
+  warning:  { icon: AlertTriangle, badgeVariant: 'warning', border: 'border-l-amber-500', iconColor: 'text-amber-500' },
+  minor:    { icon: Info, badgeVariant: 'minor', border: 'border-l-blue-500', iconColor: 'text-blue-500' },
+}

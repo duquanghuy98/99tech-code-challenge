@@ -1,0 +1,283 @@
+{
+  "brand": {
+    "suffix": "Tech"
+  },
+  "common": {
+    "retry": "Retry"
+  },
+  "nav": {
+    "home": "Home",
+    "problem1": "Problem 1",
+    "problem2": "Problem 2",
+    "problem3": "Problem 3"
+  },
+  "landing": {
+    "badge": "99Tech Interview Submission",
+    "title": "Code Challenge",
+    "subtitlePrefix": "Three problems solved with",
+    "subtitleSuffix": "Explore each solution below.",
+    "viewSolution": "View Solution",
+    "problems": {
+      "p1": {
+        "title": "Three Ways to Sum to N",
+        "description": "Three unique implementations of a summation function, each demonstrating a different approach with different time and space complexity trade-offs.",
+        "tags": ["JavaScript", "Algorithm", "Math"]
+      },
+      "p2": {
+        "title": "Fancy Swap Form",
+        "description": "A polished currency swap interface with real-time exchange rates fetched from an API, searchable token selection, and full form validation.",
+        "tags": ["React", "TypeScript", "API"]
+      },
+      "p3": {
+        "title": "Messy React",
+        "description": "A thorough code review identifying computational inefficiencies and anti-patterns in a React component, with a fully refactored solution.",
+        "tags": ["React", "TypeScript", "Refactoring"]
+      }
+    }
+  },
+  "problem1": {
+    "title": "Three Ways to Sum to N",
+    "description": "Enter any integer n to compute the summation 1 + 2 + … + n using three distinct implementations.",
+    "inputLabel": "Value of n",
+    "inputPlaceholder": "Enter an integer…",
+    "implementations": {
+      "a": {
+        "name": "Gauss Formula",
+        "description": "Mathematical closed-form: n × (n + 1) / 2"
+      },
+      "b": {
+        "name": "Iterative Loop",
+        "description": "Accumulates the sum in a single for-loop"
+      },
+      "c": {
+        "name": "Recursive",
+        "description": "Reduces the problem by one step at each call"
+      }
+    },
+    "result": "Result",
+    "time": "Time",
+    "space": "Space",
+    "emptyHint": "Enter a value above to see the results",
+    "carousel": {
+      "prevAria": "Previous solution",
+      "nextAria": "Next solution",
+      "hintDesktop": "Click sides, swipe, or use arrows - loops infinitely",
+      "hintMobile": "Swipe or use arrows - loops infinitely"
+    },
+    "moreInfo": "More info",
+    "detail": {
+      "noInput": "Enter a value of n on the page to run the step-by-step visualization.",
+      "visualization": "Visualization",
+      "codeTrace": "Code trace",
+      "work": "Work for this n",
+      "step": "Step {{current}} of {{total}}",
+      "scrubAria": "Scrub through algorithm steps",
+      "play": "Play",
+      "pause": "Pause",
+      "reset": "Reset",
+      "prevStep": "Previous step",
+      "nextStep": "Next step",
+      "speedAria": "Playback speed",
+      "speedOption": "{{speed}} speed",
+      "explain": {
+        "a": "Gauss noticed that pairing terms from both ends always yields the same sum (n + 1). That insight collapses the entire series into a single formula - no iteration required.",
+        "b": "The loop walks every integer from 1 to n, adding each one to a running total. Watch i and sum change on every iteration.",
+        "c": "Each call waits for a smaller subproblem to finish. The call stack grows with n, which is why space complexity is O(n)."
+      },
+      "gauss": {
+        "empty": "For n ≤ 0 the sum is defined as 0 - no pairing needed.",
+        "intro": "The series 1 + 2 + … + {{n}} can be rearranged by pairing outer terms.",
+        "pair": "Pair {{left}} + {{right}} = {{sum}} (pair {{index}} of {{total}}). Each pair sums to n + 1.",
+        "middle": "n is odd, so the middle term {{value}} stands alone.",
+        "formulaIntro": "Combine all pairs into the closed-form formula:",
+        "constant": "Only one multiplication and one division - O(1) time."
+      },
+      "loop": {
+        "iterations": "Iterations",
+        "track": "Iteration track",
+        "init": "Initialize sum = 0 before entering the loop.",
+        "checkContinue": "Loop condition: i = {{i}} ≤ n - continue. Current sum = {{sum}}.",
+        "checkExit": "Loop condition: i = {{i}} > n - exit loop. Final sum = {{sum}}.",
+        "add": "Add i = {{i}} to the accumulator: {{before}} → {{after}}.",
+        "done": "Return sum = {{sum}}."
+      },
+      "recursion": {
+        "depth": "Stack depth",
+        "calls": "Total calls",
+        "stack": "Call stack",
+        "call": "Call sum({{n}}) - must wait for sum({{n}} − 1) first.",
+        "base": "Base case: sum(0) = 0. Unwinding begins.",
+        "return": "sum({{n}}) = {{n}} + sum({{n}} − 1) = {{n}} + {{child}} = {{result}}.",
+        "waiting": "waiting…",
+        "hiddenFrames": "+ {{count}} more frames below",
+        "emptyStack": "Stack is empty."
+      }
+    }
+  },
+  "problem2": {
+    "title": "Currency Swap",
+    "youSell": "You Sell",
+    "youBuy": "You Buy",
+    "trending": "Trending",
+    "topPrices": "Top by USD Price",
+    "topPricesHint": "Live prices from the feed",
+    "tabSwap": "Swap",
+    "tabCash": "Buy / Sell",
+    "exchange": "Exchange",
+    "selectToken": "Select token",
+    "searchToken": "Search token…",
+    "noTokens": "No tokens found",
+    "swapping": "Swapping…",
+    "errorPrices": "Failed to load prices. Please try again.",
+    "success": "Swap successful!",
+    "successDetail": "{{from}} → {{to}} completed",
+    "networks": {
+      "ETH": "Ethereum",
+      "BTC": "Bitcoin",
+      "BSC": "BSC",
+      "Neo": "Neo",
+      "THORChain": "THORChain"
+    },
+    "fiat": {
+      "usd": "USD",
+      "youPay": "You Pay",
+      "youReceive": "You Receive",
+      "youGet": "You Get",
+      "grossUsd": "Gross value",
+      "paymentMethod": "Payment method",
+      "payoutMethod": "Payout method",
+      "methods": {
+        "card": "Debit / Credit Card",
+        "cardFee": "1.5% + $0.99",
+        "bank": "Bank Transfer",
+        "bankFee": "0.5% fee"
+      },
+      "minBuy": "Minimum purchase is $10",
+      "minBuyHint": "Minimum $10 · Prices from live feed",
+      "feeDeducted": "Includes {{fee}} service fee",
+      "processing": "Processing…",
+      "summaryTitle": "Order Summary",
+      "summaryHint": "Enter an amount to see fees and delivery estimate",
+      "rate": "Rate",
+      "serviceFee": "Service fee",
+      "etaInstant": "Estimated arrival: within minutes",
+      "etaBank": "Estimated arrival: 1–3 business days",
+      "disclaimer": "Demo only - no real payments are processed. Rates use the live price API.",
+      "successBuy": "Purchase simulated!",
+      "successBuyDetail": "Paid {{usd}} → received {{amount}} {{token}}",
+      "successSell": "Sale simulated!",
+      "successSellDetail": "Sold {{amount}} {{token}} → {{usd}} to your account"
+    },
+    "errors": {
+      "required": "Amount is required",
+      "invalid": "Please enter a valid number",
+      "positive": "Amount must be greater than 0",
+      "sameToken": "Select two different tokens"
+    }
+  },
+  "problem3": {
+    "title": "Messy React - Code Review",
+    "subtitle": "Identifying inefficiencies and anti-patterns in a provided React component, with a fully refactored solution.",
+    "tabs": {
+      "issues": "Issues Found",
+      "compare": "Before / After"
+    },
+    "issueCount": "{{count}} issues identified",
+    "seeFixInDiff": "See fix in diff",
+    "emptyFilter": "No issues match the current filter.",
+    "progress": {
+      "allFixed": "All fixed in refactored version"
+    },
+    "compare": {
+      "before": "Before",
+      "after": "After",
+      "beforeOriginal": "Before (Original)",
+      "afterRefactored": "After (Refactored)"
+    },
+    "diff": {
+      "prev": "Prev",
+      "next": "Next",
+      "reasoning": "Reasoning",
+      "issueLabel": "Issue #{{id}}",
+      "dragHint": "Drag the divider to resize panes",
+      "scrollHint": "Scroll horizontally to view full lines"
+    },
+    "filenames": {
+      "refactored": "WalletPage.tsx (refactored)",
+      "fullRefactored": "WalletPage.tsx - full refactored file"
+    },
+    "severity": {
+      "critical": "Critical",
+      "warning": "Warning",
+      "minor": "Minor"
+    },
+    "issues": {
+      "1": {
+        "title": "Undefined variable lhsPriority",
+        "detail": "lhsPriority is referenced inside the filter callback but was never declared. The correct variable in scope is balancePriority. This throws a ReferenceError at runtime and crashes the component."
+      },
+      "2": {
+        "title": "Filter logic is inverted",
+        "detail": "The condition keeps balances where amount <= 0, which is the opposite of the intended behaviour. Wallets with a positive balance should be shown; the condition should be amount > 0."
+      },
+      "3": {
+        "title": "WalletBalance interface missing blockchain field",
+        "detail": "getPriority(balance.blockchain) is called throughout the component, but the WalletBalance interface does not declare a blockchain property. TypeScript will report an error and the runtime value will always be undefined, making every priority -99."
+      },
+      "4": {
+        "title": "Sort comparator missing return for equal priorities",
+        "detail": "When leftPriority equals rightPriority, the comparator falls through without returning a value. JavaScript sort receives undefined, producing unstable ordering and incorrect list behaviour."
+      },
+      "5": {
+        "title": "Wrong type on rows map - balance.formatted is undefined",
+        "detail": "rows maps over sortedBalances but types each element as FormattedWalletBalance, then reads balance.formatted. Because sortedBalances items are WalletBalance (no formatted property), this is both a TypeScript lie and a runtime bug producing undefined as the formatted amount."
+      },
+      "6": {
+        "title": "Missing price lookup produces NaN",
+        "detail": "prices[balance.currency] is multiplied directly without a fallback. When a currency has no price entry, the expression evaluates to NaN and propagates into usdValue, breaking display and downstream calculations."
+      },
+      "7": {
+        "title": "children prop destructured but never rendered",
+        "detail": "children is extracted from props alongside rest, but the JSX only renders rows inside the wrapper div. Any child content passed to WalletPage is silently discarded, breaking the component's expected API."
+      },
+      "8": {
+        "title": "prices in useMemo dependency array is unused",
+        "detail": "prices is listed as a dependency of the useMemo that computes sortedBalances, but the callback never reads prices. This causes unnecessary recomputations whenever prices changes, degrading performance."
+      },
+      "9": {
+        "title": "formattedBalances computed but never used",
+        "detail": "formattedBalances is derived from sortedBalances and adds the formatted field, but the rows mapping below iterates over sortedBalances instead. This makes formattedBalances dead code and wastes work on every render."
+      },
+      "10": {
+        "title": "Repeated getPriority calls inside sort comparator",
+        "detail": "The sort callback invokes getPriority twice per comparison. With O(n log n) comparisons, priority is recomputed far more often than necessary. Precomputing priority once per balance before sorting is more efficient."
+      },
+      "11": {
+        "title": "getPriority defined inside the component",
+        "detail": "getPriority is a pure function with no dependency on component state or props. Defining it inside WalletPage means it is recreated on every render. It should be hoisted outside the component."
+      },
+      "12": {
+        "title": "Unstable key prop - key={index}",
+        "detail": "Using the array index as a React key causes incorrect reconciliation when items are reordered or filtered. A stable composite key such as blockchain-currency should be used, since currency alone may not be unique across chains."
+      },
+      "13": {
+        "title": "getPriority parameter typed as any",
+        "detail": "The blockchain argument is typed as any, bypassing TypeScript's ability to catch invalid values at compile time. It should be typed as string to align with the known blockchain names used in the switch statement."
+      },
+      "14": {
+        "title": "Missing memoization for derived data and rows",
+        "detail": "formattedBalances and rows are recomputed on every render even when sortedBalances and prices have not changed. Wrapping them in useMemo avoids redundant object creation and React element allocation."
+      }
+    }
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "toggle": "Language",
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}
