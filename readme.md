@@ -10,6 +10,19 @@ Email: [duquanghuy@gmail.com]  or [duquanghuy98@gmail.com]
 
 ---
 
+## For reviewers - written answers
+
+The take-home **question prompts and submitted answers** for Problems **1** and **3** live in each problem’s `written-answer/` folder (unchanged from the challenge deliverable):
+
+| Problem | Path | Contents |
+|---------|------|----------|
+| **1** | [`src/problem1/written-answer/`](src/problem1/written-answer/) | Three JavaScript implementations of *sum to n* (`index.js`) |
+| **3** | [`src/problem3/written-answer/`](src/problem3/written-answer/) | Original messy component (`original.tsx`) and refactored solution (`WalletPage.tsx`) |
+
+Problem 2 is implemented in the app UI only (no separate written-answer folder).
+
+---
+
 ## Problems
 
 | # | Title | Highlights |
