@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ChevronLeft, ChevronRight, MessageSquare, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { severityConfig } from '../../data/issues'
 import type { IssueRef } from '../../types'
 
 interface DiffIssueToolbarProps {
@@ -10,6 +11,24 @@ interface DiffIssueToolbarProps {
   highlightKey?: number
   onPrev?: () => void
   onNext?: () => void
+  mobileVariant?: 'original' | 'refactored'
+  onViewRefactored?: () => void
+  onViewOriginal?: () => void
+}
+
+export function IssueLabelBadge({ issue }: { issue: IssueRef }) {
+  const { t } = useTranslation()
+  const severityLabel = t(`problem3.severity.${issue.severity}`)
+  const issueMeta = t('problem3.diff.issueLabel', { id: issue.id })
+  const { iconColor } = severityConfig[issue.severity]
+
+  return (
+    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-border bg-background text-xs font-semibold text-foreground shadow-sm shrink-0">
+      <span>{issueMeta}</span>
+      <span className="text-border font-normal">|</span>
+      <span className={iconColor}>{severityLabel}</span>
+    </span>
+  )
 }
 
 export default function DiffIssueToolbar({
@@ -17,6 +36,9 @@ export default function DiffIssueToolbar({
   highlightKey = 0,
   onPrev,
   onNext,
+  mobileVariant,
+  onViewRefactored,
+  onViewOriginal,
 }: DiffIssueToolbarProps) {
   const { t } = useTranslation()
   const [reasoningOpen, setReasoningOpen] = useState(false)
@@ -63,9 +85,27 @@ export default function DiffIssueToolbar({
           {t('problem3.diff.reasoning')}
         </button>
 
-        <span className="text-[10px] text-muted-foreground ml-1">
-          {issueMeta} | {severityLabel}
-        </span>
+        {mobileVariant === 'original' && (
+          <button
+            type="button"
+            onClick={() => onViewRefactored?.()}
+            className="flex items-center gap-1 px-2 py-1 rounded-md border border-border bg-background/90 backdrop-blur hover:bg-muted text-xs font-medium transition-colors shadow-sm"
+          >
+            {t('problem3.diff.viewRefactored')}
+            <ChevronRight className="h-3 w-3" />
+          </button>
+        )}
+
+        {mobileVariant === 'refactored' && (
+          <button
+            type="button"
+            onClick={() => onViewOriginal?.()}
+            className="flex items-center gap-1 px-2 py-1 rounded-md border border-border bg-background/90 backdrop-blur hover:bg-muted text-xs font-medium transition-colors shadow-sm"
+          >
+            <ChevronLeft className="h-3 w-3" />
+            {t('problem3.diff.viewOriginal')}
+          </button>
+        )}
       </div>
 
       <AnimatePresence>

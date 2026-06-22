@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { useSyncedScroll } from '../../hooks/useSyncedScroll'
 import type { IssueHighlightRange, IssueRef } from '../../types'
 import CodePane from './CodePane'
-import DiffIssueToolbar, { MobilePanelToggle } from './DiffIssueToolbar'
+import DiffIssueToolbar, { IssueLabelBadge, MobilePanelToggle } from './DiffIssueToolbar'
 
 export type { IssueRef } from '../../types'
 
@@ -66,6 +66,8 @@ export default function CodeDiffViewer({
     isActive: issue.id === currentIssue?.id,
   }))
 
+  const issueLabel = currentIssue ? <IssueLabelBadge issue={currentIssue} /> : undefined
+
   const inlineBar = currentIssue ? (
     <DiffIssueToolbar
       currentIssue={currentIssue}
@@ -74,6 +76,19 @@ export default function CodeDiffViewer({
       onNext={onNext}
     />
   ) : undefined
+
+  const mobileBar = (variant: 'original' | 'refactored') =>
+    currentIssue ? (
+      <DiffIssueToolbar
+        currentIssue={currentIssue}
+        highlightKey={highlightKey}
+        onPrev={onPrev}
+        onNext={onNext}
+        mobileVariant={variant}
+        onViewRefactored={() => setMobilePanel('right')}
+        onViewOriginal={() => setMobilePanel('left')}
+      />
+    ) : undefined
 
   const sharedMarkerProps = { onMarkerClick: onIssueSelect }
   const isScrollSynced = !highlightLines
@@ -98,6 +113,8 @@ export default function CodeDiffViewer({
                 flashKey={highlightKey}
                 scrollRef={leftScrollRef}
                 onScroll={() => {}}
+                inlineBar={mobileBar('original')}
+                inlineLabel={issueLabel}
                 issueMarkers={leftIssueMarkers}
                 {...sharedMarkerProps}
               />
@@ -111,7 +128,8 @@ export default function CodeDiffViewer({
                 flashKey={highlightKey}
                 scrollRef={rightScrollRef}
                 onScroll={() => {}}
-                inlineBar={inlineBar}
+                inlineBar={mobileBar('refactored')}
+                inlineLabel={issueLabel}
                 issueMarkers={rightIssueMarkers}
                 {...sharedMarkerProps}
               />
@@ -141,6 +159,7 @@ export default function CodeDiffViewer({
               flashKey={highlightKey}
               scrollRef={leftScrollRef}
               onScroll={isScrollSynced ? () => syncScroll('left') : () => {}}
+              inlineLabel={issueLabel}
               issueMarkers={leftIssueMarkers}
               {...sharedMarkerProps}
             />
@@ -162,6 +181,7 @@ export default function CodeDiffViewer({
             scrollRef={rightScrollRef}
             onScroll={isScrollSynced ? () => syncScroll('right') : () => {}}
             inlineBar={inlineBar}
+            inlineLabel={issueLabel}
             issueMarkers={rightIssueMarkers}
             {...sharedMarkerProps}
           />

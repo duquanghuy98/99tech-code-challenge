@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { Lightbulb } from 'lucide-react'
+import { ChevronDown, ChevronUp, Lightbulb } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { IssueMarker } from '../../types'
 
@@ -18,6 +18,13 @@ const LINE_LAYOUT_STYLE: React.CSSProperties = {
   minWidth: '100%',
 }
 
+/** Offset of `el` from the top of `container`'s scroll content. */
+function getContentOffsetTop(el: HTMLElement, container: HTMLElement): number {
+  const elRect = el.getBoundingClientRect()
+  const containerRect = container.getBoundingClientRect()
+  return elRect.top - containerRect.top + container.scrollTop
+}
+
 export interface CodePaneProps {
   code: string
   language: string
@@ -28,6 +35,7 @@ export interface CodePaneProps {
   onScroll: () => void
   flashKey?: number
   inlineBar?: React.ReactNode
+  inlineLabel?: React.ReactNode
   issueMarkers?: IssueMarker[]
   onMarkerClick?: (id: string) => void
 }
@@ -42,6 +50,7 @@ export default function CodePane({
   onScroll,
   flashKey,
   inlineBar,
+  inlineLabel,
   issueMarkers = [],
   onMarkerClick,
 }: CodePaneProps) {
@@ -51,7 +60,103 @@ export default function CodePane({
   const bg = isDark ? BG.dark : BG.light
   const [flashActive, setFlashActive] = useState(false)
   const [barTop, setBarTop] = useState<number | null>(null)
+  const [labelTop, setLabelTop] = useState<number | null>(null)
   const [markerTops, setMarkerTops] = useState<Record<string, number>>({})
+  const [showScrollDownHint, setShowScrollDownHint] = useState(false)
+  const [showScrollUpHint, setShowScrollUpHint] = useState(false)
+  const toolbarRef = useRef<HTMLDivElement>(null)
+
+  const scrollTargetIntoView = useCallback(() => {
+    const container = scrollRef.current
+    if (!container) return
+
+    const padding = 16
+    const viewportTop = container.scrollTop
+    const viewportBottom = viewportTop + container.clientHeight
+
+    if (inlineBar && toolbarRef.current) {
+      const toolbar = toolbarRef.current
+      const targetTop = getContentOffsetTop(toolbar, container)
+      const targetBottom = targetTop + toolbar.offsetHeight
+
+      if (targetTop < viewportTop + padding) {
+        container.scrollTo({ top: Math.max(0, targetTop - padding), behavior: 'smooth' })
+      } else if (targetBottom > viewportBottom - padding) {
+        container.scrollTo({
+          top: Math.max(0, targetBottom - container.clientHeight + padding),
+          behavior: 'smooth',
+        })
+      }
+      return
+    }
+
+    if (!highlightLines) return
+    const firstLineEl = container.querySelector<HTMLElement>(
+      `[data-line-number="${highlightLines[0]}"]`,
+    )
+    const lastLineEl = container.querySelector<HTMLElement>(
+      `[data-line-number="${highlightLines[1]}"]`,
+    )
+    if (!firstLineEl || !lastLineEl) return
+
+    const targetTop = getContentOffsetTop(firstLineEl, container)
+    const targetBottom = getContentOffsetTop(lastLineEl, container) + lastLineEl.offsetHeight
+
+    if (targetTop < viewportTop + padding) {
+      container.scrollTo({ top: Math.max(0, targetTop - padding), behavior: 'smooth' })
+    } else if (targetBottom > viewportBottom - padding) {
+      container.scrollTo({
+        top: Math.max(0, targetBottom - container.clientHeight + padding),
+        behavior: 'smooth',
+      })
+    }
+  }, [scrollRef, inlineBar, highlightLines])
+
+  const updateScrollHint = useCallback(() => {
+    const container = scrollRef.current
+    if (!container) {
+      setShowScrollDownHint(false)
+      setShowScrollUpHint(false)
+      return
+    }
+
+    let regionTop: number
+    let regionBottom: number
+
+    if (inlineBar && toolbarRef.current) {
+      const toolbarRect = toolbarRef.current.getBoundingClientRect()
+      regionTop = toolbarRect.top
+      regionBottom = toolbarRect.bottom
+    } else if (highlightLines) {
+      const firstLineEl = container.querySelector<HTMLElement>(
+        `[data-line-number="${highlightLines[0]}"]`,
+      )
+      const lastLineEl = container.querySelector<HTMLElement>(
+        `[data-line-number="${highlightLines[1]}"]`,
+      )
+      if (!firstLineEl || !lastLineEl) {
+        setShowScrollDownHint(false)
+        setShowScrollUpHint(false)
+        return
+      }
+      const firstRect = firstLineEl.getBoundingClientRect()
+      const lastRect = lastLineEl.getBoundingClientRect()
+      regionTop = firstRect.top
+      regionBottom = lastRect.bottom
+    } else {
+      setShowScrollDownHint(false)
+      setShowScrollUpHint(false)
+      return
+    }
+
+    const containerRect = container.getBoundingClientRect()
+    const fullyVisible =
+      regionTop >= containerRect.top - 2 &&
+      regionBottom <= containerRect.bottom + 2
+
+    setShowScrollDownHint(!fullyVisible && regionBottom > containerRect.bottom + 2)
+    setShowScrollUpHint(!fullyVisible && regionTop < containerRect.top - 2)
+  }, [inlineBar, highlightLines, scrollRef])
 
   useEffect(() => {
     if (flashKey === undefined || !highlightLines) return
@@ -74,7 +179,8 @@ export default function CodePane({
       )
 
       if (firstLineEl) {
-        const target = Math.max(0, firstLineEl.offsetTop - 80)
+        const labelOffset = inlineLabel ? 36 : 0
+        const target = Math.max(0, getContentOffsetTop(firstLineEl, container) - 80 - labelOffset)
         container.scrollTo({ top: target, behavior: 'smooth' })
       } else {
         const fontSize = parseFloat(window.getComputedStyle(container).fontSize) || 12
@@ -85,12 +191,49 @@ export default function CodePane({
         })
       }
 
-      if (lastLineEl && inlineBar !== undefined) {
-        setBarTop(lastLineEl.offsetTop + lastLineEl.offsetHeight)
+      if (firstLineEl && inlineLabel) {
+        setLabelTop(getContentOffsetTop(firstLineEl, container))
+      } else {
+        setLabelTop(null)
+      }
+
+      if (lastLineEl && inlineBar) {
+        setBarTop(getContentOffsetTop(lastLineEl, container) + lastLineEl.offsetHeight)
+      } else {
+        setBarTop(null)
       }
     })
     return () => cancelAnimationFrame(frame)
-  }, [highlightLines, flashKey, scrollRef, inlineBar])
+  }, [highlightLines, flashKey, scrollRef, inlineBar, inlineLabel])
+
+  useEffect(() => {
+    if (!inlineBar) setBarTop(null)
+  }, [inlineBar])
+
+  useEffect(() => {
+    if (!inlineLabel) setLabelTop(null)
+  }, [inlineLabel])
+
+  useLayoutEffect(() => {
+    updateScrollHint()
+  }, [updateScrollHint, barTop, flashKey, highlightLines])
+
+  useEffect(() => {
+    updateScrollHint()
+    const toolbar = toolbarRef.current
+    const resizeObserver =
+      toolbar && typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => updateScrollHint())
+        : null
+    if (toolbar && resizeObserver) resizeObserver.observe(toolbar)
+
+    const timers = [150, 400, 800, 1200].map((ms) => window.setTimeout(updateScrollHint, ms))
+
+    return () => {
+      resizeObserver?.disconnect()
+      timers.forEach(clearTimeout)
+    }
+  }, [updateScrollHint, barTop, flashKey, highlightLines])
 
   useEffect(() => {
     if (!issueMarkers.length || !scrollRef.current) return
@@ -100,7 +243,7 @@ export default function CodePane({
       const tops: Record<string, number> = {}
       for (const marker of issueMarkers) {
         const el = container.querySelector<HTMLElement>(`[data-line-number="${marker.firstLine}"]`)
-        if (el) tops[marker.id] = el.offsetTop
+        if (el) tops[marker.id] = getContentOffsetTop(el, container)
       }
       setMarkerTops(tops)
     })
@@ -136,6 +279,13 @@ export default function CodePane({
   }
 
   const lineHeightPx = FONT_SIZE_REM * LINE_HEIGHT_REM * 16
+  const scrollHintsEnabled = Boolean(inlineBar || highlightLines)
+  const scrollUpLabel = inlineBar
+    ? t('problem3.diff.scrollUpForControls')
+    : t('problem3.diff.scrollUpForHighlight')
+  const scrollDownLabel = inlineBar
+    ? t('problem3.diff.scrollDownForControls')
+    : t('problem3.diff.scrollDownForHighlight')
 
   return (
     <div className="flex flex-col h-full min-w-0">
@@ -152,12 +302,16 @@ export default function CodePane({
         <span className="text-xs font-mono text-muted-foreground truncate">{filename}</span>
       </div>
 
-      <div
-        ref={scrollRef}
-        onScroll={onScroll}
-        className="flex-1 overflow-auto relative"
-        style={{ background: bg }}
-      >
+      <div className="relative flex-1 min-h-0">
+        <div
+          ref={scrollRef}
+          onScroll={() => {
+            onScroll()
+            updateScrollHint()
+          }}
+          className="h-full overflow-auto relative"
+          style={{ background: bg }}
+        >
         <SyntaxHighlighter
           language={language}
           style={isDark ? oneDark : oneLight}
@@ -217,15 +371,103 @@ export default function CodePane({
           )
         })}
 
+        {inlineLabel && labelTop !== null && (
+          <div
+            className="absolute left-0 right-0 px-3 z-10 pointer-events-none"
+            style={{ top: labelTop, transform: 'translateY(calc(-100% - 4px))' }}
+          >
+            {inlineLabel}
+          </div>
+        )}
+
         {inlineBar && barTop !== null && (
           <div
+            ref={toolbarRef}
             className="absolute left-0 right-0 px-3 py-2 z-10"
             style={{ top: barTop }}
           >
             {inlineBar}
           </div>
         )}
+        </div>
+
+        {showScrollUpHint && scrollHintsEnabled && (
+          <ScrollControlsHint
+            direction="up"
+            side={side}
+            isDark={isDark}
+            label={scrollUpLabel}
+            onClick={scrollTargetIntoView}
+          />
+        )}
+        {showScrollDownHint && scrollHintsEnabled && (
+          <ScrollControlsHint
+            direction="down"
+            side={side}
+            isDark={isDark}
+            label={scrollDownLabel}
+            onClick={scrollTargetIntoView}
+          />
+        )}
       </div>
     </div>
+  )
+}
+
+function ScrollControlsHint({
+  direction,
+  side,
+  isDark,
+  label,
+  onClick,
+}: {
+  direction: 'up' | 'down'
+  side: 'left' | 'right'
+  isDark: boolean
+  label: string
+  onClick: () => void
+}) {
+  const isUp = direction === 'up'
+  const isLeft = side === 'left'
+  const accent = isLeft ? '239, 68, 68' : '34, 197, 94'
+  const accentClass = isLeft ? 'text-red-500' : 'text-emerald-500'
+  const gradient = isUp
+    ? isDark
+      ? `linear-gradient(to bottom, rgba(${accent}, 0.22) 0%, rgba(40, 44, 52, 0.82) 28%, rgba(40, 44, 52, 0.48) 58%, transparent 100%)`
+      : `linear-gradient(to bottom, rgba(${accent}, 0.14) 0%, rgba(255, 255, 255, 0.92) 28%, rgba(250, 250, 250, 0.55) 58%, transparent 100%)`
+    : isDark
+      ? `linear-gradient(to top, rgba(${accent}, 0.22) 0%, rgba(40, 44, 52, 0.82) 28%, rgba(40, 44, 52, 0.48) 58%, transparent 100%)`
+      : `linear-gradient(to top, rgba(${accent}, 0.14) 0%, rgba(255, 255, 255, 0.92) 28%, rgba(250, 250, 250, 0.55) 58%, transparent 100%)`
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={cn(
+        'absolute inset-x-0 z-50 w-full border-0 bg-transparent p-0',
+        'cursor-pointer transition-all hover:brightness-110',
+        isUp ? 'top-0' : 'bottom-0',
+      )}
+    >
+      <div
+        className={cn('w-full px-3', isUp ? 'pb-10 pt-2' : 'pt-10 pb-2')}
+        style={{ background: gradient }}
+      >
+        <p className="flex items-center justify-center gap-1.5 text-xs font-semibold text-foreground/85 drop-shadow-sm">
+          {isUp ? (
+            <>
+              <ChevronUp className={cn('h-4 w-4 shrink-0 animate-bounce', accentClass)} />
+              {label}
+            </>
+          ) : (
+            <>
+              <ChevronDown className={cn('h-4 w-4 shrink-0 animate-bounce', accentClass)} />
+              {label}
+            </>
+          )}
+        </p>
+      </div>
+    </button>
   )
 }

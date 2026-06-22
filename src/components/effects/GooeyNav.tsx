@@ -159,7 +159,6 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     });
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
 
   return (

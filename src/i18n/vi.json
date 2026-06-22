@@ -200,7 +200,13 @@
       "reasoning": "Lý do",
       "issueLabel": "Vấn đề #{{id}}",
       "dragHint": "Kéo thanh chia để thay đổi kích thước khung",
-      "scrollHint": "Cuộn ngang để xem toàn bộ dòng code"
+      "scrollHint": "Cuộn ngang để xem toàn bộ dòng code",
+      "scrollDownForControls": "Cuộn xuống để xem điều khiển",
+      "scrollUpForControls": "Cuộn lên để xem điều khiển",
+      "scrollDownForHighlight": "Cuộn xuống để xem vùng đánh dấu",
+      "scrollUpForHighlight": "Cuộn lên để xem vùng đánh dấu",
+      "viewRefactored": "Xem bản tái cấu trúc",
+      "viewOriginal": "Xem bản gốc"
     },
     "filenames": {
       "refactored": "WalletPage.tsx (tái cấu trúc)",

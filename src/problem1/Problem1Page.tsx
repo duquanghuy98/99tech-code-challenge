@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-// @ts-ignore- plain JS module, no declaration file needed
+// @ts-expect-error plain JS module, no declaration file needed
 import { sum_to_n_a, sum_to_n_b, sum_to_n_c } from './written-answer/index.js'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

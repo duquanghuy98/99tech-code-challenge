@@ -200,7 +200,13 @@
       "reasoning": "Reasoning",
       "issueLabel": "Issue #{{id}}",
       "dragHint": "Drag the divider to resize panes",
-      "scrollHint": "Scroll horizontally to view full lines"
+      "scrollHint": "Scroll horizontally to view full lines",
+      "scrollDownForControls": "Scroll down for controls",
+      "scrollUpForControls": "Scroll up for controls",
+      "scrollDownForHighlight": "Scroll down for highlight",
+      "scrollUpForHighlight": "Scroll up for highlight",
+      "viewRefactored": "Refactored",
+      "viewOriginal": "Original"
     },
     "filenames": {
       "refactored": "WalletPage.tsx (refactored)",
